@@ -1,15 +1,51 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <Heading name="Vue Js Todo App" />
+  <Form @addTodo="addTodo" :todos="todos" />
+  <Todos :todos="todos" @todoComplete="todoComplete" @todoDelete="todoDelete" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Heading from "./components/Heading.vue";
+import Form from "./components/Form.vue";
+import Todos from "./components/Todos.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    Heading,
+    Form,
+    Todos,
+  },
+  data() {
+    return {
+      todos: [
+        {
+          id: 1,
+          text: "Star this repo",
+          completed: false,
+        },
+        {
+          id: 2,
+          text: "Completed Project",
+          completed: true,
+        },
+      ],
+    };
+  },
+  methods: {
+    addTodo($event) {
+      this.todos.push($event);
+    },
+    todoComplete(value) {
+      const currentTodo = this.todos.find((tdo) => tdo.id === value);
+      currentTodo.completed = true;
+      this.todos = this.todos.map((tdo) =>
+        tdo.id === value ? currentTodo : tdo
+      );
+    },
+    todoDelete(value) {
+      this.todos = this.todos.filter((tdo) => tdo.id !== value);
+    },
   },
 };
 </script>
